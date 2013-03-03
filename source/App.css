@@ -2,6 +2,80 @@
 	Put anything you reference with "url()" in ../assets/
 	This way, you can minify your application, and just remove the "source" folder for production
 */
-.nice-padding {
-	padding: 15px;
+/*
+#app {
+	margin: 16px;
+	border-radius: 4px;
+	background-color: silver;
+	padding: 16px;
+}
+*/
+
+.dark-scene  {
+	background: url(../assets/bg.png);
+	color: #FFF;
+}
+
+.cinema-favorite-icon {
+  height: 24px;
+  width: 50px;
+	background: url(../assets/star.png) center 0px no-repeat;
+}
+
+.item {
+	border-top: 1px solid silver;
+	padding: 5px 5px;
+	/*background-color: #333333; */
+}
+
+.filmTitle {
+	font-size: 14px; 
+	font-weight: bold; 
+	color: #F17B23;
+	margin: 5px;
+}
+
+.filmDescription {
+	font-size: 12px;
+	margin: 5px;
+}
+
+.filmScheduleDivider {
+	background-color: #666;
+	font-size: 16px;
+	font-weight: bold;
+	padding: 8px 14px;
+}
+
+.filmScheduleEntry {
+	padding: 5px;
+	color: #F17B23;
+	font-size: 16px;
+}
+
+.active-row {
+	background: transparent url(../assets/down-bg.png) left top no-repeat;
+	-webkit-background-size: 100% 100%;
+}
+
+.reloadDialogTitle {
+	font-weight: bolder;
+}
+
+.reloadDialogDescription {
+	font-weight: normal;
+}
+
+.reloadDialogBtn {
+	float: right;
+	margin-top: 25px;
+}
+
+.popup {
+	width: 300px;
+}
+
+.popup > * {
+	display: block;
+	margin: 10px 10px;
 }
