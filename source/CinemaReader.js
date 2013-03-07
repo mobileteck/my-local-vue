@@ -17,14 +17,17 @@ enyo.kind({
 						{kind: "Control", content: "Cinemas", name: "c10"},
 						{kind: "onyx.Spinner", classes: "onyx-light", name: "spinner"}
 					]}
-			]},
-		{kind: "onyx.InputDecorator", name: "id10", components: [
-				{kind: "Input", placeholder: "Search Cinmea", fit: true, name: "cinemaFilter", defaultFocus: true, onkeyup: "filterInputChange", onchange: "filterInputChange", onclear: "resetFilter"},
-				{kind: "Image", src: "assets/search-input-search.png", name: "cinemaFilterImg", ontap: "resetFilter"}
-			]},
+		]},
+		{
+			kind: "SearchInput",
+			placeholder: "Search Cinmea", 
+			name: "cinemaFilter", 
+			onInputChanged: "filterInputChange",
+			onInputClear: "resetFilter"
+		},
 		{kind: "PulldownList", fixedHeight: false, count: 10, rowsPerPage: 10, strategyKind: "TouchScrollStrategy", classes: "enyo-list", content: "pulldownList", fit: true, controlParentName: "client", name: "list", components: [
 				{kind: "onyx.InputDecorator", classes: "item enyo-border-box", style: "width: 100%;", name: "cinemaRow", components: [
-					{kind: "Control", fit: true,  name: "cinema", ontap: "selectCinema", style: "padding-top: 10px; padding-bottom: 10px;"},
+					{kind: "Control", fit: true,  name: "cinema", ontap: "selectCinema", style: "padding-top: 10px; padding-bottom: 10px; width: 200px;"},
 					{kind: "onyx.IconButton", src: "assets/menu-icon-favorites.png", style: "height: 32px; float: right;", name: "itemFavorite", ontap: "favoriteStarClickHandler"},
 				]}
 			], onPullRelease: "pullRelease", onPullComplete: "pullComplete", onSetupItem: "getItem"},
@@ -40,8 +43,6 @@ enyo.kind({
 	],
 	create: function() {
 		this.inherited(arguments);
-		this.$.cinemaFilter.applyStyle("width", "255px");
-		
 		this.cinemaList = [];
 		this.cinemaFilteredList = [];
 		this.selectedCinema = -1; 
@@ -52,6 +53,11 @@ enyo.kind({
 		// So kick of an async job to load the data
 		enyo.job("load", enyo.bind(this, "loadData"), 1000);
 		
+	},
+
+	rendered: function() {
+    	this.inherited(arguments);
+		this.$.cinemaFilter.resize(this.hasNode().offsetWidth);
 	},
 
 	loadData: function() {
@@ -281,7 +287,6 @@ enyo.kind({
 			var listItems = this.cinemaList;
 			if(filterString) {
 				filterString = filterString.toLowerCase();	
-				this.$.cinemaFilterImg.setSrc('assets/search-input-close.png');
 			}
 			var i = 0;
 			while(i < listItems.length) {
@@ -302,7 +307,6 @@ enyo.kind({
 			this.$.list.setCount(this.cinemaFilteredList.length);
 			this.$.list.reset();
 		} else{
-			this.$.cinemaFilterImg.setSrc('assets/search-input-search.png');
 			this.resetFilter();
 		}
 		

@@ -8,5 +8,6 @@ enyo.depends(
 	"App.js",
 	"CinemaReader.js",
 	"FilmReader.js",
-	"FilmDetail.js"
+	"FilmDetail.js",
+	"SearchInput.js"
 );

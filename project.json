@@ -1,0 +1,25 @@
+{
+  "build": {
+    "phonegap": {
+      "enabled": false,
+      "icon": {
+        "src": "icon.png",
+        "role": "default"
+      },
+      "preferences": {
+        "phonegap-version": "2.0.0"
+      }
+    }
+  },
+  "preview": {
+    "top_file": "index.html"
+  },
+  "author": {
+    "name": "",
+    "href": ""
+  },
+  "id": "com.mobileteck.mylocalvue",
+  "version": "1.0",
+  "name": "MyLocalVue",
+  "title": "MyLocalVue"
+}

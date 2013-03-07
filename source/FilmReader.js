@@ -18,13 +18,16 @@ enyo.kind({
 				{kind: "FittableColumns", content: "fittableColumns", name: "fc20", components: [
 						{kind: "Control", content: "Films", name: "cinemaName"}
 					]}
-			]},
-		{kind: "onyx.InputDecorator", name: "id20", components: [
-				{kind: "Input", placeholder: "Search Film", name: "filmFilter", onkeyup: "filterInputChange", onchange: "filterInputChange", onclear: "resetFilter"},
-				{kind: "Image", src: "assets/search-input-search.png", name: "img20"}
-			]},
-		{kind: "PulldownList", count: 15, rowsPerPage: 10, strategyKind: "TouchScrollStrategy", classes: "enyo-list", content: "pulldownList", fit: true, controlParentName: "client", name: "list", components: [
-				{kind: "Control", classes: "item enyo-border-box", layoutKind: "FittableRowsLayout", name: "filmRow", components: [
+		]},
+		{
+			kind: "SearchInput",
+			placeholder: "Search Film", 
+			name: "filmFilter", 
+			onInputChanged: "filterInputChange",
+			onInputClear: "resetFilter"
+		},	
+		{kind: "PulldownList", fixedHeight: false, count: 5, rowsPerPage: 10, strategyKind: "TouchScrollStrategy", classes: "enyo-list", content: "pulldownList", fit: true, controlParentName: "client", name: "list", components: [
+				{kind: "onyx.InputDecorator", classes: "item enyo-border-box", style: "width: 100%;", layoutKind: "FittableRowsLayout", name: "filmRow", components: [
 						{kind: "Control", classes: "filmTitle", name: "title"},
 						{kind: "Control", classes: "filmDescription", name: "description"}
 					], ontap: "selectFilm"}
@@ -36,14 +39,16 @@ enyo.kind({
 	],
 	create: function() {
 		this.inherited(arguments);
-		this.$.filmFilter.applyStyle("width", "255px");
-		
 		this.filmList = [];
 		this.filmFilteredList = [];
 		this.selectedFilm = -1;
 		
 		this.$.list.pullRelease();
-		
+	},
+
+	rendered: function() {
+    	this.inherited(arguments);
+		this.$.filmFilter.resize(this.hasNode().offsetWidth);
 	},
 	
 	cinemaChanged: function() {
