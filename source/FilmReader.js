@@ -12,12 +12,11 @@ enyo.kind({
 	events: {
 		onSelectFilm: "",
 		onShowSpinner: "",
+		onCheckInternetConnection: ""
 	},
 	components: [
-		{kind: "onyx.Toolbar", name: "filmHeader", components: [
-				{kind: "FittableColumns", content: "fittableColumns", name: "fc20", components: [
-						{kind: "Control", content: "Films", name: "cinemaName"}
-					]}
+		{kind: "onyx.Toolbar", name: "filmHeader", layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
+			{kind: "Control", content: "Films", name: "cinemaName"}
 		]},
 		{
 			kind: "SearchInput",
@@ -34,7 +33,7 @@ enyo.kind({
 			], onPullRelease: "pullRelease", onPullComplete: "pullComplete", onSetupItem: "getItem"},
 		{kind: "onyx.Toolbar", layoutKind: "FittableColumnsLayout", name: "mt20", noStretch: true, components: [
 				{content: "", style: "height: 32px;"},
-				{kind: "onyx.Grabber", name: "gr20", ontap: "toggleFullScreen"}
+				{kind: "onyx.Grabber", name: "gr20"}
 		]}
 	],
 	create: function() {
@@ -67,7 +66,11 @@ enyo.kind({
 			//var url = "http://m.myvue.com/now-booking.aspx";
 			var url = serviceURL + "/now-booking.aspx?cinemaid=" + this.cinema.id;
 			this.log("Loading Film list from " + url);
-			new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");		
+			if(this.doCheckInternetConnection()){
+				new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");		
+			} else{
+				this.doShowSpinner({show: false});
+			}				
 		}
 		
 		
@@ -230,8 +233,5 @@ enyo.kind({
         this.$.list.reset();
     }
 
-,
-    toggleFullScreen: function(inSender, inEvent) {
-        // TODO - Auto-generated code
-    }
+
 });

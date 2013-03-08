@@ -28,6 +28,15 @@
 	/*background-color: #333333; */
 }
 
+.aboutView {
+	color: #FFF;
+}
+
+.helpText {
+	padding: 5px;
+	font-size: 14px;
+}
+
 .filmTitle {
 	font-size: 14px; 
 	font-weight: bold; 

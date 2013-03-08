@@ -10,13 +10,12 @@ enyo.kind({
 	},
 	events: {
 		onShowSpinner: "",
+		onCheckInternetConnection: ""
 	},
 	components: [
-		{kind: "onyx.Toolbar", name: "detailHeader", components: [
-				{kind: "FittableColumns", content: "fittableColumns", name: "fc30", components: [
-						{kind: "Control", content: "Film Name", name: "header"}
-					]}
-			]},
+		{kind: "onyx.Toolbar", name: "detailHeader", layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
+			{kind: "Control", content: "Film Name", name: "header"}
+		]},
 		{kind: "Scroller", name: "scroller",  classes: "enyo-scroller", thumb: false, fit: true, touch: true, horizontal: "hidden", components: [	
 			{kind: "FittableColumns", style: "margin: 10px;", name: "fc31", components: [
 					{kind: "Image", style: "width: 88px; height: 130px;", name: "filmImage"},
@@ -72,7 +71,11 @@ enyo.kind({
 		this.doShowSpinner({show: true});
 		var url = serviceURL + "/" + this.film.u;
 		this.log("Loading Film details from " + url);
-		new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
+		if(this.doCheckInternetConnection()){
+			new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
+		} else{
+			this.doShowSpinner({show: false});
+		}			
 		
 	},
 	
@@ -82,12 +85,12 @@ enyo.kind({
 	
 	gotResults: function(inSender, inResponse, inRequest) {
 
-		enyo.log("Fetching...");
+		//this.log("Fetching...");
 		//this.log(arguments);
 	
 		var myDiv = window.document.createElement("div");
 		myDiv.innerHTML = inResponse;
-		enyo.log("Parsing...");
+		//this.log("Parsing...");
 		this.scheduleListModel.items =  this.parseScheduleData(myDiv);
 		this.$.header.setContent(this.scheduleListModel.filmTitle);
 		this.$.filmImage.setSrc(this.scheduleListModel.filmImage);

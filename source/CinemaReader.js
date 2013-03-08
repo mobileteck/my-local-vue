@@ -9,14 +9,15 @@ enyo.kind({
 	published: {
 	},
 	events: {
-		onSelectCinema: ""
+		onShowAbout: "",
+		onSelectCinema: "",
+		onShowSpinner: "",
+		onCheckInternetConnection: ""
 	},
 	components: [
-		{kind: "onyx.Toolbar", name: "cinemaHeader", components: [
-				{kind: "FittableColumns", content: "fittableColumns", name: "fc10", components: [
-						{kind: "Control", content: "Cinemas", name: "c10"},
-						{kind: "onyx.Spinner", classes: "onyx-light", name: "spinner"}
-					]}
+		{kind: "onyx.Toolbar", name: "cinemaHeader",  layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
+			{kind: "Control", content: "Cinemas", name: "c10", fit: true},
+			{name: "refineButton", kind: "onyx.IconButton", src: "assets/more-menu-icon.png", ontap: "doShowAbout", style: "width: 32x; float: right;"}
 		]},
 		{
 			kind: "SearchInput",
@@ -61,6 +62,7 @@ enyo.kind({
 	},
 
 	loadData: function() {
+		this.log("Loading Data");
 		this.loadPreferences();
 		
 		if(this.cinemaList.length === 0){
@@ -70,10 +72,6 @@ enyo.kind({
 		}
 	},
 
-	destroy: function(){
-		this.savePreferences();
-	},
-	
 	loadPreferences: function(){
 		var prefsString = localStorage.getItem("prefs");
 		if (prefsString) {
@@ -89,7 +87,10 @@ enyo.kind({
      		this.cinemaList = [];
      	}
 
-   		this.$.favouriteToggle.setActive(this.prefs.favouriteOnly);
+     	if(this.prefs.favouriteOnly){
+     		this.$.favouriteToggle.setActive(this.prefs.favouriteOnly);	
+     	}
+   		
      			
 	},
 
@@ -102,10 +103,14 @@ enyo.kind({
 	},
 
 	loadCinemaList: function(){
-		this.$.spinner.show();
+		this.doShowSpinner({show: true});
 		var url = serviceURL + "/default.aspx";
 		this.log("Loading Cinema List from " + url);
-		new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
+		if(this.doCheckInternetConnection()){
+			new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
+		} else{
+			this.doShowSpinner({show: false});
+		}	
 	},
 	
 	parseCinemaData: function(xml){
@@ -144,7 +149,7 @@ enyo.kind({
     },
 	
 	gotResults: function(inSender, inResponse) {
-		this.$.spinner.hide();
+		this.doShowSpinner({show: false});
 		//this.log("gotResults");
 		var myDiv = window.document.createElement("div");
 		myDiv.innerHTML = inResponse;
@@ -172,7 +177,6 @@ enyo.kind({
 			this.selectedCinema = 0;
 			var cinema = this.cinemaFilteredList[0];
 			if(cinema) {
-				this.log(cinema);
 				this.doSelectCinema({"cinema": cinema, "clicked": false});	
 			}	
 
@@ -184,28 +188,19 @@ enyo.kind({
     },
 
 	gotFailure: function(inSender, inResponse) {
-		this.$.spinner.hide();
+		this.doShowSpinner({show: false});
 		this.log("gotFailure");
 		this.log(inResponse);
 		//this.doError({title: 'Service Error', message: 'Looks like we are having some trouble loading data. Please try again shortly.'});
 
 	},
 
-//	pullStart: function(inSender, inEvent) {
-//		this.$.reloadDialog.show();
-//	}
-
-
     pullRelease: function(inSender, inEvent) {
-		//this.$.list.setCount(10);
-		//this.$.list.completePull();	
-		//this.$.list.reset();
 		if(this.cinemaList.length > 0) {
 			this.$.reloadDialog.show();	
 		} else{
 			this.loadCinemaList();
 		}
-		
     },
 
     closeReloadDialog: function() {
@@ -320,4 +315,5 @@ enyo.kind({
 		this.$.list.setCount(this.cinemaFilteredList.length);
         this.$.list.reset();
     }
+
 });
