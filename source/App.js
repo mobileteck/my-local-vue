@@ -4,7 +4,7 @@ enyo.kind({
 	classes: "onyx enyo-fit",
 	components:[
 		{kind: "Panels", arrangerKind: "CollapsingArranger", fit: true, name: "panels", draggable: true,	narrowFit: true, classes: "panels enyo-border-box", components: [
-			{kind: "aboutView"},
+			{kind: "aboutView", onOK: "next"},
 			{kind: "CinemaReader", name: "cinemas", onSelectCinema: "cinemaSelected", onCheckInternetConnection: "checkInternetConnection", onShowAbout: "showAbout"},
 			{kind: "FilmReader", name: "films", onSelectFilm: "filmSelected", onCheckInternetConnection: "checkInternetConnection"},
 			{kind: "FilmDetail", name: "filmDetail", onShowSpinner: "showSpinner", onCheckInternetConnection: "checkInternetConnection"}
@@ -70,7 +70,7 @@ enyo.kind({
 		if(navigator.connection) {
 			var networkState = navigator.connection.type;
 			this.log(networkState);
-			if(networkState === navigator.connection.NONE || networkState === "none") {
+			if(networkState === "none") {
 				this.log("No Network Connection found");
 				this.showBanner('No Internet Connection');			
 				return false;

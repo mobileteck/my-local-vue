@@ -17,7 +17,7 @@ enyo.kind({
 	components: [
 		{kind: "onyx.Toolbar", name: "cinemaHeader",  layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
 			{kind: "Control", content: "Cinemas", name: "c10", fit: true},
-			{name: "refineButton", kind: "onyx.IconButton", src: "assets/more-menu-icon.png", ontap: "doShowAbout", style: "width: 32x; float: right;"}
+			{name: "aboutButton", kind: "onyx.IconButton", src: "assets/more-menu-icon.png", ontap: "doShowAbout", style: "width: 32x; float: right;"}
 		]},
 		{
 			kind: "SearchInput",

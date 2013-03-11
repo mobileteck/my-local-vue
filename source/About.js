@@ -3,9 +3,13 @@ enyo.kind({
 	kind: "FittableRows",
 	classes: "enyo-fit dark-scene aboutView",
 	fit: true,
+	events: {
+		onOK: "",
+	},
 	components: [
 		{kind: "onyx.Toolbar", name: "aboutHeader",  layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
-			{kind: "Control", content: "About", name: "c50", fit: true}
+			{kind: "Control", content: "About", name: "c50", fit: true},
+			{name: "okButton", kind: "onyx.IconButton", src: "assets/invite-icon-accept.png", ontap: "doOK", style: "width: 32x; float: right;"}
 		]},
 		{kind: "Scroller", name: "scroller",  classes: "enyo-scroller", thumb: false, fit: true, touch: true, horizontal: "hidden", components: [
 			{name: "thanks",  style: "font-size: 14px; font-weight: normal; margin: 10px", content: "Thank you for using MyLocalVue App."},
@@ -50,7 +54,7 @@ enyo.kind({
 
  	create: function(){
         this.inherited(arguments);
-        this.$.version.setContent("MyLocalVue v2.3.1");
+        this.$.version.setContent("MyLocalVue v2.0.0");
 		this.$.copyright.setContent("&copy; Copyright " + new Date().getFullYear() + " Mobileteck.com");
     },
 
