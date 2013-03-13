@@ -1,5 +1,3 @@
-// Copyright 2013, $ORGANIZATION
-// All rights reserved.
 enyo.kind({
     name: "SearchInput",
     kind: "onyx.InputDecorator",

@@ -1,5 +1,3 @@
-// Copyright 2013, $ORGANIZATION
-// All rights reserved.
 enyo.kind({
 	name: "CinemaReader",
 	kind: "FittableRows",
@@ -21,7 +19,7 @@ enyo.kind({
 		]},
 		{
 			kind: "SearchInput",
-			placeholder: "Search Cinmea", 
+			placeholder: "Search Cinema", 
 			name: "cinemaFilter", 
 			onInputChanged: "filterInputChange",
 			onInputClear: "resetFilter"
