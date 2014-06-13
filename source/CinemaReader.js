@@ -10,12 +10,11 @@ enyo.kind({
 		onShowAbout: "",
 		onSelectCinema: "",
 		onShowSpinner: "",
-		onCheckInternetConnection: ""
 	},
 	components: [
 		{kind: "onyx.Toolbar", name: "cinemaHeader",  layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
-			{kind: "Control", content: "Cinemas", name: "c10", fit: true},
-			{name: "aboutButton", kind: "onyx.IconButton", src: "assets/more-menu-icon.png", ontap: "doShowAbout", style: "width: 32x; float: right;"}
+			{name: "backButton", kind: "onyx.Button", content: "Back", ontap: "doShowAbout"},
+			{kind: "Control", content: "Cinemas", name: "c10", fit: true, style: "margin-left: 10px;"},
 		]},
 		{
 			kind: "SearchInput",
@@ -38,7 +37,8 @@ enyo.kind({
 			{ classes: "reloadDialogDescription", content: "Reloading will rest your Favourite Cinemas, Are you sure you want to continue?"},
 			{ kind : "onyx.Button", content: "Cancel", ontap: "closeReloadDialog", classes: "onyx-affirmative reloadDialogBtn"},
 			{ kind : "onyx.Button", content: "Reload", ontap: "reloadCinemaList", classes: "onyx-negative reloadDialogBtn"}
-		]}
+		]},
+		{name: "nativeUtils", kind: "NativeUtils"}
 	],
 	create: function() {
 		this.inherited(arguments);
@@ -103,10 +103,11 @@ enyo.kind({
 	loadCinemaList: function(){
 		this.doShowSpinner({show: true});
 		var url = serviceURL + "/default.aspx";
-		this.log("Loading Cinema List from " + url);
-		if(this.doCheckInternetConnection()){
+		this.log("Loading Cinema List from: " + url);
+		if(this.$.nativeUtils.checkInternetConnection()){
 			new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
 		} else{
+			this.log("No Internet Connection");
 			this.doShowSpinner({show: false});
 		}	
 	},
@@ -115,7 +116,7 @@ enyo.kind({
     
 		//this.log(xml);
 
-        var x = xml.querySelectorAll("select#content1_ctl00_lbCinemas");
+        var x = xml.querySelectorAll("select");
         //this.log("x=" + x.length);
         var cinemas = [];
         if (x.length > 0) {

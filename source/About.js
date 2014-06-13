@@ -8,14 +8,15 @@ enyo.kind({
 	},
 	components: [
 		{kind: "onyx.Toolbar", name: "aboutHeader",  layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
-			{kind: "Control", content: "About", name: "c50", fit: true},
-			{name: "okButton", kind: "onyx.IconButton", src: "assets/invite-icon-accept.png", ontap: "doOK", style: "width: 32x; float: right;"}
+			{name: "okButton", kind: "onyx.Button", content: "OK", ontap: "doOK"},
+			{kind: "Control", content: "About", name: "c50", fit: true, style: "margin-left: 10px;"},
 		]},
 		{kind: "Scroller", name: "scroller",  classes: "enyo-scroller", thumb: false, fit: true, touch: true, horizontal: "hidden", components: [
 			{name: "thanks",  style: "font-size: 14px; font-weight: normal; margin: 10px", content: "Thank you for using MyLocalVue App."},
+			{tag: "br"},
 			{kind: "onyx.Groupbox", classes: "inputGroup", components: [
-				{kind: "onyx.GroupboxHeader", content: "Coming Soon"},
-				{classes: "helpText", content: "Upcoming Films"}
+				{kind: "onyx.GroupboxHeader", content: "Review"},
+				{classes: "helpText", content: "If you find the app useful, Tap here to write a review and help us spread the word.", ontap: "doReview"}
 			]},
 			{tag: "br"},
 			{kind: "onyx.Groupbox", classes: "inputGroup", components: [
@@ -54,7 +55,7 @@ enyo.kind({
 
  	create: function(){
         this.inherited(arguments);
-        this.$.version.setContent("MyLocalVue v2.0.0");
+        this.$.version.setContent("MyLocalVue v2.0.1");
 		this.$.copyright.setContent("&copy; Copyright " + new Date().getFullYear() + " Mobileteck.com");
     },
 
@@ -68,7 +69,13 @@ enyo.kind({
 
     doEmail: function() {
    		 window.location.replace('mailto:feedback@mobileteck.com?subject=MyLocalVue Feedback');	
-    }
+    },
+
+    doReview: function(){
+		var url = "http://developer.palm.com/appredirect/?packageid=com.mobileteck.mylocalvue";
+		window.open(url,'_system');	
+   		return true;
+	}
 
  	
 });

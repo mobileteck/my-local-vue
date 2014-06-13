@@ -5801,7 +5801,7 @@ module.exports = {
                 var info={};
                 if (!result.isInternetConnectionAvailable) { info.type=Connection.NONE; }
                 if (result.wifi.onInternet) { info.type=Connection.WIFI; }
-                if (result.wan.state==="connected") { info.type=Connection.CELL_2G; }
+                if (result.wan != null && result.wan.state==="connected") { info.type=Connection.CELL_2G; }
 
                 successCallback(info.type);
             },

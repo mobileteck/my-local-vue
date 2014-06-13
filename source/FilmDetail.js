@@ -8,11 +8,12 @@ enyo.kind({
 	},
 	events: {
 		onShowSpinner: "",
-		onCheckInternetConnection: ""
+		onBack: ""
 	},
 	components: [
 		{kind: "onyx.Toolbar", name: "detailHeader", layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
-			{kind: "Control", content: "Film Name", name: "header"}
+			{name: "backButton", kind: "onyx.Button", content: "Back", ontap: "doBack"},
+			{kind: "Control", content: "Film Name", name: "header", style: "margin-left: 10px;"}
 		]},
 		{kind: "Scroller", name: "scroller",  classes: "enyo-scroller", thumb: false, fit: true, touch: true, horizontal: "hidden", components: [	
 			{kind: "FittableColumns", style: "margin: 10px;", name: "fc31", components: [
@@ -39,7 +40,8 @@ enyo.kind({
 		{kind: "onyx.Toolbar", name: "mt30", layoutKind: "FittableColumnsLayout", noStretch: true, components: [
 				{content: "", style: "height: 32px;"},
 				{kind: "onyx.Grabber", name: "gr30"}
-		]}
+		]},
+		{name: "nativeUtils", kind: "NativeUtils"}
 	],
 	create: function() {
 		this.inherited(arguments);
@@ -69,7 +71,7 @@ enyo.kind({
 		this.doShowSpinner({show: true});
 		var url = serviceURL + "/" + this.film.u;
 		this.log("Loading Film details from " + url);
-		if(this.doCheckInternetConnection()){
+		if(this.$.nativeUtils.checkInternetConnection()){
 			new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");	
 		} else{
 			this.doShowSpinner({show: false});
@@ -102,6 +104,10 @@ enyo.kind({
 		
 		this.log("Successfully Loaded " + this.scheduleListModel.items.length + " items");
 		this.doShowSpinner({show: false});
+     	
+     	this.$.scroller.stabilize();
+      	this.$.scroller.scrollToTop();
+    	
 		this.reflow();
 	},
 	

@@ -4,10 +4,10 @@ enyo.kind({
 	classes: "onyx enyo-fit",
 	components:[
 		{kind: "Panels", arrangerKind: "CollapsingArranger", fit: true, name: "panels", draggable: true,	narrowFit: true, classes: "panels enyo-border-box", components: [
-			{kind: "aboutView", onOK: "next"},
-			{kind: "CinemaReader", name: "cinemas", onSelectCinema: "cinemaSelected", onCheckInternetConnection: "checkInternetConnection", onShowAbout: "showAbout"},
-			{kind: "FilmReader", name: "films", onSelectFilm: "filmSelected", onCheckInternetConnection: "checkInternetConnection"},
-			{kind: "FilmDetail", name: "filmDetail", onShowSpinner: "showSpinner", onCheckInternetConnection: "checkInternetConnection"}
+			{kind: "aboutView", onOK: "showCinemaList"},
+			{kind: "CinemaReader", name: "cinemas", onSelectCinema: "cinemaSelected", onShowAbout: "showAbout", onBack: "backHandler"},
+			{kind: "FilmReader", name: "films", onSelectFilm: "filmSelected", onBack: "backHandler"},
+			{kind: "FilmDetail", name: "filmDetail", onShowSpinner: "showSpinner", onBack: "backHandler"}
 		]},
 		{name: "spinner", kind: "onyx.Popup", centered: true, floating: true, scrim: true, autoDismiss: false, components: [
 				{kind: "onyx.Spinner"}
@@ -22,13 +22,14 @@ enyo.kind({
 
 	create: function() {
 		this.inherited(arguments);
-		this.next();
+		this.showCinemaList();
 	},
 		
 	cinemaSelected: function(inSender, args) {
+		this.log(args);
 		this.$.films.setCinema(args.cinema);
 		if(args.clicked){
-			this.next();
+			this.$.panels.setIndex(2);
 		}
 	},
 	
@@ -48,8 +49,14 @@ enyo.kind({
 		
 	},
 
+	showCinemaList: function(){
+		this.log("showCinemaList");
+		this.$.panels.setIndex(1);
+	},
+
 	next: function(){
-		if(enyo.dom.getWindowWidth() < 600){
+		//if(Panels.isScreenNarrow) { 
+		if(enyo.dom.getWindowWidth() < 800){
 			this.log("next");
 			this.$.panels.next();
 			//this.$.panels.getActive().reflow();
@@ -58,29 +65,12 @@ enyo.kind({
 
 	backHandler: function() {
 		this.log("backHandler");
-		if(enyo.dom.getWindowWidth() < 600){
-			this.log("next");
+		//if(enyo.dom.getWindowWidth() < 800){
+		//if(Panels.isScreenNarrow) { 	
+			this.log("previous");
 			this.$.panels.previous();
 			//this.$.panels.getActive().reflow();
-		}
-	},
-
-	checkInternetConnection: function(){
-		//this.log("Checking Internet Connection");
-		if(navigator.connection) {
-			var networkState = navigator.connection.type;
-			this.log(networkState);
-			if(networkState === "none") {
-				this.log("No Network Connection found");
-				this.showBanner('No Internet Connection');			
-				return false;
-			} else{
-				return true;	
-			}	
-		} else{
-			// can't check, defaults to true
-			return true;
-		}
+		//}
 	},
 
 	showBanner: function(message) {

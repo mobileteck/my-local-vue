@@ -10,11 +10,12 @@ enyo.kind({
 	events: {
 		onSelectFilm: "",
 		onShowSpinner: "",
-		onCheckInternetConnection: ""
+		onBack: ""
 	},
 	components: [
 		{kind: "onyx.Toolbar", name: "filmHeader", layoutKind: "FittableColumnsLayout", style: "height: 50px;", components: [
-			{kind: "Control", content: "Films", name: "cinemaName"}
+			{name: "backButton", kind: "onyx.Button", content: "Back", ontap: "doBack"},
+			{kind: "Control", content: "Films", name: "cinemaName", style: "margin-left: 10px;"}
 		]},
 		{
 			kind: "SearchInput",
@@ -32,7 +33,8 @@ enyo.kind({
 		{kind: "onyx.Toolbar", layoutKind: "FittableColumnsLayout", name: "mt20", noStretch: true, components: [
 				{content: "", style: "height: 32px;"},
 				{kind: "onyx.Grabber", name: "gr20"}
-		]}
+		]},
+		{name: "nativeUtils", kind: "NativeUtils"}
 	],
 	create: function() {
 		this.inherited(arguments);
@@ -64,7 +66,7 @@ enyo.kind({
 			//var url = "http://m.myvue.com/now-booking.aspx";
 			var url = serviceURL + "/now-booking.aspx?cinemaid=" + this.cinema.id;
 			this.log("Loading Film list from " + url);
-			if(this.doCheckInternetConnection()){
+			if(this.$.nativeUtils.checkInternetConnection()){
 				new enyo.Ajax({url: url, handleAs: "text"}).go().response(this, "gotResults").error(this, "gotFailure");		
 			} else{
 				this.doShowSpinner({show: false});
